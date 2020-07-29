@@ -59,5 +59,24 @@ namespace CollectionHelpers
                 action(item);
             }
         }
+
+        /// <summary>
+        /// Checks if a collection is Null or Empty
+        /// </summary>
+        /// <remarks>
+        /// The operation runs in O(n) because of <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/>.
+        /// <para>
+        /// If the type of <paramref name="collection"/> implements <see cref="ICollection{T}"/>,
+        /// that implentation is used to obtain the count of elements.
+        /// Otherwise <see cref="Enumerable.Count{TSource}(IEnumerable{TSource})"/> is used
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> collection)
+        {
+            return collection == null || collection.Count() == 0;
+        }
     }
 }
