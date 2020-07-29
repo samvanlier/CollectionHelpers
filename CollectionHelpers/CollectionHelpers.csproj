@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackOnBuild>true</PackOnBuild>
-    <PackageVersion>1.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <Authors>Sam Van Lier</Authors>
     <Description>A extention project for ICollections and IEnumerable based on Linq</Description>
     <PackageId>CollectionHelpers</PackageId>
