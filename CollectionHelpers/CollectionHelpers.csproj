@@ -1,13 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackOnBuild>true</PackOnBuild>
     <PackageVersion>1.0</PackageVersion>
     <Authors>Sam Van Lier</Authors>
-    <Description>A extention project for Collections based on Linq</Description>
-    <PackageId>collection-helpers</PackageId>
+    <Description>A extention project for ICollections and IEnumerable based on Linq</Description>
+    <PackageId>CollectionHelpers</PackageId>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0</Version>
   </PropertyGroup>
 
 </Project>

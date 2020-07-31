@@ -146,5 +146,39 @@ namespace CollectionHelpers
                 action(item);
             }
         }
+
+        /// <summary>
+        /// Shuffle an <see cref="ICollection{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher-Yates_shuffle">Fisher-Yates shuffle</see> 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">An <see cref="ICollection{T}"/> to shuffle</param>
+        /// <returns>A shuffled <see cref="ICollection{T}"/></returns>
+        public static ICollection<T> Shuffle<T>(this ICollection<T> source)
+        {
+            var list = source.ToList();
+            list.ShuffleInplace();
+            return list;
+        }
+
+        /// <summary>
+        /// Shuffle an <see cref="ICollection{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher-Yates_shuffle">Fisher-Yates shuffle</see> 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">An <see cref="ICollection{T}"/> to shuffle</param>
+        /// <param name="seed">A seed to use for the <see cref="Random(Int32)"/></param>
+        /// <returns>A shuffled <see cref="ICollection{T}"/></returns>
+        public static ICollection<T> Shuffle<T>(this ICollection<T> source, int seed)
+        {
+            var list = source.ToList();
+            list.ShuffleInplace(seed);
+            return list;
+        }
+
+        public static ICollection<T> Shuffle<T>(this ICollection<T> source, Random random)
+        {
+            var list = source.ToList();
+            list.ShuffleInplace(random);
+            return list;
+        }
     }
 }

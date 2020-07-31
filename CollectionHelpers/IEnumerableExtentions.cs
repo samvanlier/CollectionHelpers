@@ -78,5 +78,53 @@ namespace CollectionHelpers
         {
             return collection == null || collection.Count() == 0;
         }
+
+        /// <summary>
+        /// Shuffle a <see cref="IEnumerable{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm">Fisher-Yates-Durstenfeld shuffle</see>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to shuffle</param>
+        /// <returns>A shuffled <see cref="IEnumerable{T}"/></returns>
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+        {
+            return source.Shuffle(new Random());
+        }
+
+        /// <summary>
+        /// Shuffle a <see cref="IEnumerable{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm">Fisher-Yates-Durstenfeld shuffle</see>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to shuffle</param>
+        /// <param name="seed">A seed to use for the <see cref="Random(Int32)"/></param>
+        /// <returns>A shuffled <see cref="IEnumerable{T}"/></returns>
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, int seed)
+        {
+            return source.Shuffle(new Random(seed));
+        }
+
+        /// <summary>
+        /// Shuffle a <see cref="IEnumerable{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm">Fisher-Yates-Durstenfeld shuffle</see>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">An <see cref="IEnumerable{T}"/> to shuffle</param>
+        /// <param name="random">A <see cref="Random"/> object that is used for the shuffeling</param>
+        /// <returns>A shuffled <see cref="IEnumerable{T}"/></returns>
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random random)
+        {
+            if (source == null) 
+                throw new ArgumentNullException("source cannot be null");
+            if (random == null)
+                throw new ArgumentNullException("random cannot be null");
+
+            var buffer = source.ToList();
+            for (int i = 0; i < buffer.Count; i++)
+            {
+                int j = random.Next(i, buffer.Count);
+                yield return buffer[j];
+
+                buffer[j] = buffer[i];
+            }
+        }
+
     }
 }
