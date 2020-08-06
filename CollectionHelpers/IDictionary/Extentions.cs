@@ -5,7 +5,7 @@ using System.Linq;
 namespace CollectionHelpers.IDictionary
 {
     /// <summary>
-    /// This contains 
+    /// This contains extentions for <see cref="IDictionary{TKey, TValue}"/>
     /// </summary>
     public static class Extentions
     {

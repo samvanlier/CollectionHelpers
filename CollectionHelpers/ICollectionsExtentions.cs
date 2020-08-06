@@ -174,6 +174,13 @@ namespace CollectionHelpers
             return list;
         }
 
+        /// <summary>
+        /// Shuffle an <see cref="ICollection{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher-Yates_shuffle">Fisher-Yates shuffle</see> 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">An <see cref="ICollection{T}"/> to shuffle</param>
+        /// <param name="random">A <see cref="Random"/> object that is used for the shuffeling</param>
+        /// <returns>A shuffled <see cref="ICollection{T}"/></returns>
         public static ICollection<T> Shuffle<T>(this ICollection<T> source, Random random)
         {
             var list = source.ToList();

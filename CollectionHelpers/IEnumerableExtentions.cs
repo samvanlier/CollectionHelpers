@@ -126,5 +126,16 @@ namespace CollectionHelpers
             }
         }
 
+        /// <summary>
+        /// Checks if a <see cref="IEnumerable{T}"/> is a subset of another <see cref="IEnumerable{T}"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="superset">The super set which might contain the <paramref name="subset"/></param>
+        /// <param name="subset">A subset to test</param>
+        /// <returns>A boolean indicating if the <paramref name="subset"/> is a propper subset of the <paramref name="superset"/></returns>
+        public static bool ContainsAll<T>(this IEnumerable<T> superset, IEnumerable<T> subset)
+        {
+            return !subset.Except(superset).Any();
+        }
     }
 }
