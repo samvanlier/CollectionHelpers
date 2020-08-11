@@ -5,7 +5,7 @@ using System.Linq;
 namespace CollectionHelpers
 {
     /// <summary>
-    /// Contains extentions that can be applied on all ICollections
+    /// Contains extentions that can be applied on all <see cref="ICollection{T}"/>
     /// </summary>
     public static class ICollectionsExtentions
     {
@@ -134,7 +134,7 @@ namespace CollectionHelpers
         }
 
         /// <summary>
-        /// Performce the specified action on each element of the <see cref="ICollection{T}"/>
+        /// Performs the specified action on each element of the <see cref="ICollection{T}"/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -185,6 +185,35 @@ namespace CollectionHelpers
         {
             var list = source.ToList();
             list.ShuffleInplace(random);
+            return list;
+        }
+
+        /// <summary>
+        /// Split an <see cref="ICollection{T}"/> into a <see cref="ICollection{T}"/> of <see cref="ICollection{T}"/>s of size <paramref name="groupSize"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The <see cref="ICollection{T}"/> to split into chunkss</param>
+        /// <param name="groupSize">The size of the chuncks. This value has to be strictly positive.</param>
+        /// <returns>An <see cref="ICollection{T}"/> containing <see cref="ICollection{T}"/> of size <paramref name="groupSize"/></returns>
+        /// <exception cref="ArgumentException">This is thrown when the <paramref name="groupSize"/> is smaller or equal then 0</exception>
+        /// <remarks>
+        /// The time complexity is O(N/<paramref name="groupSize"/>), where N is the number of elements.
+        /// </remarks>
+        public static ICollection<ICollection<T>> Split<T>(this ICollection<T> source, int groupSize)
+        {
+            if (groupSize <= 0)
+                throw new ArgumentException("groupSize should be strictly positive (greater then 0)");
+
+            var list = new List<ICollection<T>>();
+            var temp = source.ToList(); //O(1)
+            while (temp.Count != 0) // O(N/groupSize)
+            {
+                // O(1) for IList
+                list.Add(temp.Take(groupSize).ToList());
+                // Skip is O(1) for IList, ToList() is 0(1) because underlying implementation is IList
+                temp = temp.Skip(groupSize).ToList();
+            }
+
             return list;
         }
     }

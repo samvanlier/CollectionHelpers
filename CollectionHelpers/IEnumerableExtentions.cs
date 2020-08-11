@@ -74,10 +74,8 @@ namespace CollectionHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns><see langword="true"/> if <paramref name="source"/> is <see langword="null"/> or empty; <see langword="false"/> if <paramref name="source"/> contains at least one object</returns>
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
-        {
-            return source == null || source.Any();
-        }
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source) => source == null || source.Any();
+
 
         /// <summary>
         /// Shuffle a <see cref="IEnumerable{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm">Fisher-Yates-Durstenfeld shuffle</see>
@@ -85,10 +83,8 @@ namespace CollectionHelpers
         /// <typeparam name="T"></typeparam>
         /// <param name="source">An <see cref="IEnumerable{T}"/> to shuffle</param>
         /// <returns>A shuffled <see cref="IEnumerable{T}"/></returns>
-        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
-        {
-            return source.Shuffle(new Random());
-        }
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source) => source.Shuffle(new Random());
+
 
         /// <summary>
         /// Shuffle a <see cref="IEnumerable{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm">Fisher-Yates-Durstenfeld shuffle</see>
@@ -97,10 +93,8 @@ namespace CollectionHelpers
         /// <param name="source">An <see cref="IEnumerable{T}"/> to shuffle</param>
         /// <param name="seed">A seed to use for the <see cref="Random(Int32)"/></param>
         /// <returns>A shuffled <see cref="IEnumerable{T}"/></returns>
-        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, int seed)
-        {
-            return source.Shuffle(new Random(seed));
-        }
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, int seed) => source.Shuffle(new Random(seed));
+
 
         /// <summary>
         /// Shuffle a <see cref="IEnumerable{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm">Fisher-Yates-Durstenfeld shuffle</see>
@@ -111,7 +105,7 @@ namespace CollectionHelpers
         /// <returns>A shuffled <see cref="IEnumerable{T}"/></returns>
         public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random random)
         {
-            if (source == null) 
+            if (source == null)
                 throw new ArgumentNullException("source cannot be null");
             if (random == null)
                 throw new ArgumentNullException("random cannot be null");
@@ -133,9 +127,36 @@ namespace CollectionHelpers
         /// <param name="superset">The super set which might contain the <paramref name="subset"/></param>
         /// <param name="subset">A subset to test</param>
         /// <returns>A boolean indicating if the <paramref name="subset"/> is a propper subset of the <paramref name="superset"/></returns>
-        public static bool ContainsAll<T>(this IEnumerable<T> superset, IEnumerable<T> subset)
+        public static bool ContainsAll<T>(this IEnumerable<T> superset, IEnumerable<T> subset) => !subset.Except(superset).Any();
+
+        /// <summary>
+        /// Split an <see cref="IEnumerable{T}"/> into an <see cref="IEnumerable{T}"/> containing <see cref="IEnumerable{T}"/>s of size <paramref name="groupSize"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The <see cref="IEnumerable{T}"/> to split into chunks</param>
+        /// <param name="groupSize">The size of the chuncks. This value has to be strictly positive.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> containing <see cref="IEnumerable{T}"/> of size <paramref name="groupSize"/></returns>
+        /// <exception cref="ArgumentException">This is thrown when the <paramref name="groupSize"/> is smaller or equal then 0</exception>
+        /// <remarks>
+        /// The time complexity is O(N+N/<paramref name="groupSize"/>), where N is the number of elements.
+        /// If the underlying implementation is of type <see cref="ICollection{T}"/> it is O(N/<paramref name="groupSize"/>).
+        /// </remarks>
+        public static IEnumerable<IEnumerable<T>> Split<T>(this IEnumerable<T> source, int groupSize)
         {
-            return !subset.Except(superset).Any();
+            if (groupSize <= 0)
+                throw new ArgumentException("groupSize should be strictly positive (greater then 0)");
+
+            var list = new List<IEnumerable<T>>();
+            var temp = source.ToList(); //O(N) if underlying implementation is not an ICollection
+            while (temp.Count != 0) // O(N/groupSize)
+            {
+                // O(1) for IList
+                list.Add(temp.Take(groupSize));
+                // Skip is O(1) for IList, ToList() is 0(1) because underlying implementation is IList
+                temp = temp.Skip(groupSize).ToList();
+            }
+
+            return list.AsEnumerable(); // O(1)
         }
     }
 }
