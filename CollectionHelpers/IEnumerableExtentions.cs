@@ -95,7 +95,6 @@ namespace CollectionHelpers
         /// <returns>A shuffled <see cref="IEnumerable{T}"/></returns>
         public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, int seed) => source.Shuffle(new Random(seed));
 
-
         /// <summary>
         /// Shuffle a <see cref="IEnumerable{T}"/> using <see href="http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm">Fisher-Yates-Durstenfeld shuffle</see>
         /// </summary>
@@ -157,6 +156,62 @@ namespace CollectionHelpers
             }
 
             return list.AsEnumerable(); // O(1)
+        }
+
+        /// <summary>
+        /// Find the index of the largest value in the sequence.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The sequence to search in.</param>
+        /// <returns>The index of the largest element in <paramref name="source"/>. If the sequence is empty, the return value is <c>-1</c></returns>
+        /// <remarks>
+        /// The time complexity is O(N), where N is the number of elements in the sequence.
+        /// The size complexity is O(1).
+        /// </remarks>
+        public static int MaxIndex<T>(this IEnumerable<T> source) where T : IComparable<T>
+        {
+            int maxIndex = -1;
+            T maxValue = default(T); // Immediately overwritten anyway
+
+            int index = 0;
+            foreach (T value in source)
+            {
+                if (value.CompareTo(maxValue) > 0 || maxIndex == -1)
+                {
+                    maxIndex = index;
+                    maxValue = value;
+                }
+                index++;
+            }
+            return maxIndex;
+        }
+
+        /// <summary>
+        /// Find the index of the smallest value in the sequence.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">The sequence to search in.</param>
+        /// <returns>The index of the smallest element in <paramref name="source"/>. If the sequence is empty, the return value is <c>-1</c></returns>
+        /// <remarks>
+        /// The time complexity is O(N), where N is the number of elements in the sequence.
+        /// The size complexity is O(1).
+        /// </remarks>
+        public static int MinIndex<T>(this IEnumerable<T> source) where T : IComparable<T>
+        {
+            int maxIndex = -1;
+            T maxValue = default(T); // Immediately overwritten anyway
+
+            int index = 0;
+            foreach (T value in source)
+            {
+                if (value.CompareTo(maxValue) < 0 || maxIndex == -1)
+                {
+                    maxIndex = index;
+                    maxValue = value;
+                }
+                index++;
+            }
+            return maxIndex;
         }
     }
 }

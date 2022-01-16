@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace CollectionHelpers
 {
-     internal class ThreadSafeRandom
+    internal class ThreadSafeRandom
     {
         [ThreadStatic] private static Random Local;
 
